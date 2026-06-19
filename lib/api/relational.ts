@@ -26,6 +26,8 @@ const saveData = <T>(key: string, data: T[]): void => {
 export const relationalService = {
   // Get recipient options untuk dropdown
   async getRecipientOptions(type: 'balita' | 'ibu_menyusui' | 'lansia'): Promise<{ id: string, name: string }[]> {
+    console.log(`🔍 [GET] /api/relational/recipients/${type} - Fetching recipient options`);
+    
     await delay(100);
     
     // Direct force load data from mock
@@ -44,7 +46,7 @@ export const relationalService = {
     const storageKey = STORAGE_KEYS[type];
     const data = getData(storageKey);
     
-    console.log(`Final ${type} data from storage:`, data);
+    console.log(`✅ [GET] /api/relational/recipients/${type} - Success: ${data.length} options returned`);
     
     return data.map((item: any) => ({
       id: item.id,
@@ -95,6 +97,8 @@ export const relationalService = {
 
   // Create penimbangan dengan update relasi
   async createPenimbanganWithActivity(penimbanganData: any): Promise<ApiResponse<Penimbangan>> {
+    console.log('📊 [POST] /api/relational/penimbangan - Creating penimbangan with activity for balita:', penimbanganData.balitaId);
+    
     await delay(300);
     
     const penimbanganList = getData<Penimbangan>(STORAGE_KEYS.penimbangan);
@@ -103,6 +107,7 @@ export const relationalService = {
     // Find balita info
     const balita = balitaList.find(b => b.id === penimbanganData.balitaId);
     if (!balita) {
+      console.log('❌ [POST] /api/relational/penimbangan - Balita not found:', penimbanganData.balitaId);
       return {
         success: false,
         message: 'Balita not found',
@@ -167,6 +172,8 @@ export const relationalService = {
       description: `Penimbangan ${balita.name} - ${penimbanganData.weight}kg, ${penimbanganData.height}cm (${statusText})`,
       date: getCurrentDate()
     });
+    
+    console.log(`✅ [POST] /api/relational/penimbangan - Success: ${balita.name} - ${penimbanganData.weight}kg, ${penimbanganData.height}cm, Status: ${nutritionStatus}`);
     
     return {
       success: true,

@@ -1,11 +1,11 @@
-export const delay = (ms: number = 800): Promise<void> => 
+export const delay = (ms: number = 200): Promise<void> => 
   new Promise(resolve => setTimeout(resolve, ms));
 
 export const randomDelay = (): Promise<void> => 
-  delay(Math.random() * 1000 + 500);
+  delay(Math.random() * 300 + 100);
 
 export const shouldSimulateError = (): boolean => 
-  Math.random() < 0.05; // 5% chance of error
+  Math.random() < 0.01; // 1% chance of error
 
 export const generateId = (): string => 
   Date.now().toString() + Math.random().toString(36).substr(2, 9);

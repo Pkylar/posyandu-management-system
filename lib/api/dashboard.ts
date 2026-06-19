@@ -41,9 +41,12 @@ const generateChartData = (): ChartData[] => {
 
 export const dashboardApi = {
   async getStats(): Promise<ApiResponse<DashboardStats>> {
+    console.log('📊 [GET] /api/dashboard/stats - Fetching dashboard statistics');
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [GET] /api/dashboard/stats - Simulated error');
       return {
         success: false,
         message: 'Failed to fetch dashboard data',
@@ -78,6 +81,9 @@ export const dashboardApi = {
       recentActivities,
       chartData: generateChartData()
     };
+    
+    console.log('✅ [GET] /api/dashboard/stats - Success: Statistics calculated');
+    console.log(`📏 [STATS] Balita: ${stats.totalBalita}, Ibu Menyusui: ${stats.totalIbuMenyusui}, Lansia: ${stats.totalLansia}, Stunting: ${stats.totalStunting}`);
     
     return {
       success: true,

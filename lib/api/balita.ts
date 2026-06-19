@@ -30,12 +30,15 @@ export const balitaApi = {
   },
 
   async getAll(): Promise<ApiResponse<Balita[]>> {
+    console.log('🔍 [GET] /api/balita - Fetching all balita data');
+    
     // Ensure data is initialized
     this.init();
     
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [GET] /api/balita - Simulated error');
       return {
         success: false,
         message: 'Failed to fetch data',
@@ -44,6 +47,7 @@ export const balitaApi = {
     }
     
     const data = getBalitaData();
+    console.log(`✅ [GET] /api/balita - Success: ${data.length} records returned`);
     
     return {
       success: true,
@@ -53,6 +57,8 @@ export const balitaApi = {
   },
 
   async getById(id: string): Promise<ApiResponse<Balita>> {
+    console.log(`🔍 [GET] /api/balita/${id} - Fetching balita detail`);
+    
     // Ensure data is initialized
     this.init();
     
@@ -62,6 +68,7 @@ export const balitaApi = {
     const balita = data.find(b => b.id === id);
     
     if (!balita) {
+      console.log(`❌ [GET] /api/balita/${id} - Not found`);
       return {
         success: false,
         message: 'Data not found',
@@ -69,6 +76,7 @@ export const balitaApi = {
       };
     }
     
+    console.log(`✅ [GET] /api/balita/${id} - Success: ${balita.namaLengkap}`);
     return {
       success: true,
       data: balita,
@@ -77,9 +85,12 @@ export const balitaApi = {
   },
 
   async create(balitaData: Omit<Balita, 'id' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<Balita>> {
+    console.log('📝 [POST] /api/balita - Creating new balita:', balitaData.namaLengkap);
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [POST] /api/balita - Simulated error');
       return {
         success: false,
         message: 'Create failed',
@@ -92,6 +103,7 @@ export const balitaApi = {
     // Check duplicate NIK
     const existingNik = data.find(b => b.nik === balitaData.nik);
     if (existingNik) {
+      console.log('❌ [POST] /api/balita - Duplicate NIK:', balitaData.nik);
       return {
         success: false,
         message: 'Duplicate NIK',
@@ -109,6 +121,7 @@ export const balitaApi = {
     const updatedData = [...data, newBalita];
     saveBalitaData(updatedData);
     
+    console.log(`✅ [POST] /api/balita - Success: ${newBalita.namaLengkap} created with ID ${newBalita.id}`);
     return {
       success: true,
       data: newBalita,
@@ -117,9 +130,12 @@ export const balitaApi = {
   },
 
   async update(id: string, balitaData: Partial<Balita>): Promise<ApiResponse<Balita>> {
+    console.log(`📝 [PUT] /api/balita/${id} - Updating balita`);
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log(`❌ [PUT] /api/balita/${id} - Simulated error`);
       return {
         success: false,
         message: 'Update failed',
@@ -131,6 +147,7 @@ export const balitaApi = {
     const index = data.findIndex(b => b.id === id);
     
     if (index === -1) {
+      console.log(`❌ [PUT] /api/balita/${id} - Not found`);
       return {
         success: false,
         message: 'Data not found',
@@ -142,6 +159,7 @@ export const balitaApi = {
     if (balitaData.nik && balitaData.nik !== data[index].nik) {
       const existingNik = data.find(b => b.nik === balitaData.nik && b.id !== id);
       if (existingNik) {
+        console.log(`❌ [PUT] /api/balita/${id} - Duplicate NIK:`, balitaData.nik);
         return {
           success: false,
           message: 'Duplicate NIK',
@@ -159,6 +177,7 @@ export const balitaApi = {
     data[index] = updatedBalita;
     saveBalitaData(data);
     
+    console.log(`✅ [PUT] /api/balita/${id} - Success: ${updatedBalita.namaLengkap} updated`);
     return {
       success: true,
       data: updatedBalita,
@@ -167,9 +186,12 @@ export const balitaApi = {
   },
 
   async delete(id: string): Promise<ApiResponse<null>> {
+    console.log(`🗑️ [DELETE] /api/balita/${id} - Deleting balita`);
+    
     await delay(500);
     
     if (shouldSimulateError()) {
+      console.log(`❌ [DELETE] /api/balita/${id} - Simulated error`);
       return {
         success: false,
         message: 'Delete failed',
@@ -181,6 +203,7 @@ export const balitaApi = {
     const index = data.findIndex(b => b.id === id);
     
     if (index === -1) {
+      console.log(`❌ [DELETE] /api/balita/${id} - Not found`);
       return {
         success: false,
         message: 'Data not found',
@@ -188,9 +211,11 @@ export const balitaApi = {
       };
     }
     
+    const deletedBalita = data[index];
     data.splice(index, 1);
     saveBalitaData(data);
     
+    console.log(`✅ [DELETE] /api/balita/${id} - Success: ${deletedBalita.namaLengkap} deleted`);
     return {
       success: true,
       data: null,

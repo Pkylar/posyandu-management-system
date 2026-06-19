@@ -22,12 +22,15 @@ export const lansiaApi = {
   },
 
   async getAll(): Promise<ApiResponse<Lansia[]>> {
+    console.log('👴 [GET] /api/lansia - Fetching all lansia data');
+    
     // Ensure data is initialized
     this.init();
     
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [GET] /api/lansia - Simulated error');
       return {
         success: false,
         message: 'Failed to fetch data',
@@ -36,6 +39,7 @@ export const lansiaApi = {
     }
     
     const data = getLansiaData();
+    console.log(`✅ [GET] /api/lansia - Success: ${data.length} records returned`);
     
     return {
       success: true,
@@ -66,9 +70,12 @@ export const lansiaApi = {
   },
 
   async create(lansiaData: Omit<Lansia, 'id' | 'bmi' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<Lansia>> {
+    console.log('📝 [POST] /api/lansia - Creating new lansia:', lansiaData.name);
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [POST] /api/lansia - Simulated error');
       return {
         success: false,
         message: 'Create failed',
@@ -81,6 +88,7 @@ export const lansiaApi = {
     // Check duplicate NIK
     const existingNik = data.find(l => l.nik === lansiaData.nik);
     if (existingNik) {
+      console.log('❌ [POST] /api/lansia - Duplicate NIK:', lansiaData.nik);
       return {
         success: false,
         message: 'Duplicate NIK',
@@ -101,6 +109,8 @@ export const lansiaApi = {
     
     const updatedData = [...data, newLansia];
     saveLansiaData(updatedData);
+    
+    console.log(`✅ [POST] /api/lansia - Success: ${newLansia.name} created with ID ${newLansia.id}, BMI: ${bmi}`);
     
     return {
       success: true,

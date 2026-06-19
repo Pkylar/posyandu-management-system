@@ -7,9 +7,12 @@ import {
 
 export const authApi = {
   async login(username: string, password: string): Promise<ApiResponse<User & { token: string }>> {
+    console.log('🔐 [POST] /api/auth/login - Login attempt for username:', username);
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [POST] /api/auth/login - Simulated network error');
       return {
         success: false,
         message: 'Network error',
@@ -30,6 +33,8 @@ export const authApi = {
     setToStorage('auth_user', user);
     setToStorage('auth_token', token);
     
+    console.log(`✅ [POST] /api/auth/login - Success: ${user.name} logged in`);
+    
     return {
       success: true,
       data: { ...user, token },
@@ -38,10 +43,14 @@ export const authApi = {
   },
 
   async logout(): Promise<ApiResponse<null>> {
+    console.log('🚪 [POST] /api/auth/logout - User logging out');
+    
     await delay(300);
     
     setToStorage('auth_user', null);
     setToStorage('auth_token', null);
+    
+    console.log('✅ [POST] /api/auth/logout - Success: User logged out');
     
     return {
       success: true,

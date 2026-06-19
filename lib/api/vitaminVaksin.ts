@@ -22,9 +22,12 @@ export const vitaminVaksinApi = {
   },
 
   async getAll(): Promise<ApiResponse<VitaminVaksin[]>> {
+    console.log('💉 [GET] /api/vitamin-vaksin - Fetching all vitamin/vaksin data');
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [GET] /api/vitamin-vaksin - Simulated error');
       return {
         success: false,
         message: 'Failed to fetch data',
@@ -35,6 +38,8 @@ export const vitaminVaksinApi = {
     const data = getVitaminVaksinData().sort((a, b) => 
       new Date(b.date).getTime() - new Date(a.date).getTime()
     );
+    
+    console.log(`✅ [GET] /api/vitamin-vaksin - Success: ${data.length} records returned`);
     
     return {
       success: true,
@@ -79,9 +84,12 @@ export const vitaminVaksinApi = {
   },
 
   async create(vitaminVaksinData: Omit<VitaminVaksin, 'id' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<VitaminVaksin>> {
+    console.log('💉 [POST] /api/vitamin-vaksin - Creating new vitamin/vaksin:', vitaminVaksinData.name);
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [POST] /api/vitamin-vaksin - Simulated error');
       return {
         success: false,
         message: 'Create failed',
@@ -99,6 +107,8 @@ export const vitaminVaksinApi = {
     const data = getVitaminVaksinData();
     const updatedData = [...data, newRecord];
     saveVitaminVaksinData(updatedData);
+    
+    console.log(`✅ [POST] /api/vitamin-vaksin - Success: ${vitaminVaksinData.name} (${vitaminVaksinData.type}) given to ${vitaminVaksinData.recipientName}`);
     
     return {
       success: true,

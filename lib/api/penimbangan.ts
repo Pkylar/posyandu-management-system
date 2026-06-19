@@ -27,9 +27,12 @@ export const penimbanganApi = {
     savePenimbanganData(mockPenimbangan);
   },
   async getAll(): Promise<ApiResponse<Penimbangan[]>> {
+    console.log('📊 [GET] /api/penimbangan - Fetching all penimbangan data');
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [GET] /api/penimbangan - Simulated error');
       return {
         success: false,
         message: 'Failed to fetch data',
@@ -40,6 +43,8 @@ export const penimbanganApi = {
     const data = getPenimbanganData().sort((a, b) => 
       new Date(b.date).getTime() - new Date(a.date).getTime()
     );
+    
+    console.log(`✅ [GET] /api/penimbangan - Success: ${data.length} records returned`);
     
     return {
       success: true,
@@ -84,9 +89,12 @@ export const penimbanganApi = {
   },
 
   async create(penimbanganData: Omit<Penimbangan, 'id' | 'age' | 'nutritionStatus' | 'stuntingStatus' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<Penimbangan>> {
+    console.log('📝 [POST] /api/penimbangan - Creating new penimbangan for balita:', penimbanganData.balitaId);
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [POST] /api/penimbangan - Simulated error');
       return {
         success: false,
         message: 'Create failed',
@@ -112,6 +120,9 @@ export const penimbanganApi = {
     const data = getPenimbanganData();
     const updatedData = [...data, newPenimbangan];
     savePenimbanganData(updatedData);
+    
+    console.log(`✅ [POST] /api/penimbangan - Success: New record created with ID ${newPenimbangan.id}`);
+    console.log(`📏 [INFO] Weight: ${penimbanganData.weight}kg, Height: ${penimbanganData.height}cm, Status: ${nutritionStatus}`);
     
     return {
       success: true,

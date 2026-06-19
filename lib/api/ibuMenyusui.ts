@@ -22,12 +22,15 @@ export const ibuMenyusuiApi = {
   },
 
   async getAll(): Promise<ApiResponse<IbuMenyusui[]>> {
+    console.log('🤱 [GET] /api/ibu-menyusui - Fetching all ibu menyusui data');
+    
     // Ensure data is initialized
     this.init();
     
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [GET] /api/ibu-menyusui - Simulated error');
       return {
         success: false,
         message: 'Failed to fetch data',
@@ -36,6 +39,7 @@ export const ibuMenyusuiApi = {
     }
     
     const data = getIbuMenyusuiData();
+    console.log(`✅ [GET] /api/ibu-menyusui - Success: ${data.length} records returned`);
     
     return {
       success: true,
@@ -66,9 +70,12 @@ export const ibuMenyusuiApi = {
   },
 
   async create(ibuData: Omit<IbuMenyusui, 'id' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<IbuMenyusui>> {
+    console.log('📝 [POST] /api/ibu-menyusui - Creating new ibu menyusui:', ibuData.name);
+    
     await randomDelay();
     
     if (shouldSimulateError()) {
+      console.log('❌ [POST] /api/ibu-menyusui - Simulated error');
       return {
         success: false,
         message: 'Create failed',
@@ -81,6 +88,7 @@ export const ibuMenyusuiApi = {
     // Check duplicate NIK
     const existingNik = data.find(i => i.nik === ibuData.nik);
     if (existingNik) {
+      console.log('❌ [POST] /api/ibu-menyusui - Duplicate NIK:', ibuData.nik);
       return {
         success: false,
         message: 'Duplicate NIK',
@@ -97,6 +105,8 @@ export const ibuMenyusuiApi = {
     
     const updatedData = [...data, newIbu];
     saveIbuMenyusuiData(updatedData);
+    
+    console.log(`✅ [POST] /api/ibu-menyusui - Success: ${newIbu.name} created with ID ${newIbu.id}`);
     
     return {
       success: true,
