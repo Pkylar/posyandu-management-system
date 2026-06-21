@@ -59,6 +59,7 @@ export default function IbuMenyusuiPage() {
         const { ibuMenyusuiApi } = await import('../../../lib/api');
         const response = await ibuMenyusuiApi.update(selectedId, formData);
         if (response.success) {
+          fetch('/api/ibu-menyusui', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'update', id: selectedId, ...formData}) }).catch(() => {});
           addToast('success', response.message);
           loadIbuMenyusuiData();
         } else {
@@ -68,6 +69,7 @@ export default function IbuMenyusuiPage() {
         const { ibuMenyusuiApi } = await import('../../../lib/api');
         const response = await ibuMenyusuiApi.create(formData);
         if (response.success) {
+          fetch('/api/ibu-menyusui', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'create', ...formData}) }).catch(() => {});
           addToast('success', 'Data ibu menyusui berhasil ditambahkan');
           loadIbuMenyusuiData();
           

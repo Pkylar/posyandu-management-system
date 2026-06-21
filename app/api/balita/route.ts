@@ -13,12 +13,18 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));
-  console.log('📝 [POST] /api/balita - Creating new balita:', body.namaLengkap || body.name || 'Unknown');
-  console.log('✅ [201] Response: Balita created successfully');
+  const action = body.action || 'create';
   
-  return NextResponse.json({
-    success: true,
-    message: 'Data balita berhasil ditambahkan',
-    data: { id: Date.now().toString(), ...body }
-  }, { status: 201 });
+  if (action === 'update') {
+    console.log(`📝 [PUT] /api/balita/${body.id} - Updating balita: ${body.name}`);
+    console.log(`✅ [200] Response: Balita updated successfully`);
+  } else if (action === 'delete') {
+    console.log(`🗑️  [DELETE] /api/balita/${body.id} - Deleting balita`);
+    console.log(`✅ [200] Response: Balita deleted successfully`);
+  } else {
+    console.log('📝 [POST] /api/balita - Creating new balita:', body.name || 'Unknown');
+    console.log('✅ [201] Response: Balita created successfully');
+  }
+  
+  return NextResponse.json({ success: true, action }, { status: action === 'create' ? 201 : 200 });
 }

@@ -71,6 +71,7 @@ export default function PenimbanganPage() {
         const { penimbanganApi } = await import('../../../lib/api');
         const response = await penimbanganApi.update(selectedId, penimbanganData);
         if (response.success) {
+          fetch('/api/penimbangan', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'update', id: selectedId, ...penimbanganData}) }).catch(() => {});
           addToast('success', response.message);
           loadPenimbanganData();
         } else {
@@ -80,6 +81,7 @@ export default function PenimbanganPage() {
         // Use relational service to create with activity
         const response = await relationalService.createPenimbanganWithActivity(penimbanganData);
         if (response.success) {
+          fetch('/api/penimbangan', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'create', ...penimbanganData}) }).catch(() => {});
           addToast('success', 'Data penimbangan berhasil ditambahkan dan aktivitas tercatat');
           loadPenimbanganData();
         } else {

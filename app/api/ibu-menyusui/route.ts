@@ -13,12 +13,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));
-  console.log('📝 [POST] /api/ibu-menyusui - Creating new ibu menyusui:', body.name || 'Unknown');
-  console.log('✅ [201] Response: Ibu menyusui created successfully');
+  const action = body.action || 'create';
   
-  return NextResponse.json({
-    success: true,
-    message: 'Data ibu menyusui berhasil ditambahkan',
-    data: { id: Date.now().toString(), ...body }
-  }, { status: 201 });
+  if (action === 'update') {
+    console.log(`📝 [PUT] /api/ibu-menyusui/${body.id} - Updating ibu menyusui: ${body.name}`);
+    console.log(`✅ [200] Response: Ibu menyusui updated successfully`);
+  } else {
+    console.log('📝 [POST] /api/ibu-menyusui - Creating new ibu menyusui:', body.name || 'Unknown');
+    console.log('✅ [201] Response: Ibu menyusui created successfully');
+  }
+  
+  return NextResponse.json({ success: true, action }, { status: action === 'create' ? 201 : 200 });
 }

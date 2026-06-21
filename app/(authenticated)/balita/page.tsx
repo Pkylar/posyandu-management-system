@@ -57,6 +57,9 @@ export default function BalitaPage() {
         const { balitaApi } = await import('../../../lib/api');
         const response = await balitaApi.update(selectedId, formData);
         if (response.success) {
+          // Log to terminal
+          fetch('/api/balita', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'update', id: selectedId, ...formData}) }).catch(() => {});
+          
           addToast('success', response.message);
           
           // Update related data if name changed
@@ -73,6 +76,9 @@ export default function BalitaPage() {
         // Use relational service for creating new balita
         const response = await relationalService.createBalitaWithDefaults(formData);
         if (response.success) {
+          // Log to terminal
+          fetch('/api/balita', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'create', ...formData}) }).catch(() => {});
+          
           addToast('success', response.message + ' (Data balita berhasil ditambahkan dengan koneksi terkait)');
           loadBalitaData();
         } else {
@@ -110,6 +116,9 @@ export default function BalitaPage() {
         // Use relational service to delete with related data
         const response = await relationalService.deleteBalitaWithRelatedData(id);
         if (response.success) {
+          // Log to terminal
+          fetch('/api/balita', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'delete', id}) }).catch(() => {});
+          
           addToast('success', 'Data balita dan semua data terkait berhasil dihapus');
           loadBalitaData();
         } else {
