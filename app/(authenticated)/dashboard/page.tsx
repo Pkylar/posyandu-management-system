@@ -44,6 +44,10 @@ export default function DashboardPage() {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
+      
+      // Hit server API route (logs appear in terminal)
+      fetch('/api/dashboard').catch(() => {});
+      
       const response = await dashboardApi.getStats();
       
       if (response.success && response.data) {

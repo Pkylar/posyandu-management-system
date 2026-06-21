@@ -39,6 +39,9 @@ export default function LansiaPage() {
 
   const loadLansiaData = async () => {
     try {
+      // Hit server API route (logs appear in terminal)
+      fetch('/api/lansia').catch(() => {});
+      
       const { lansiaApi } = await import('../../../lib/api');
       const response = await lansiaApi.getAll();
       if (response.success && response.data) {

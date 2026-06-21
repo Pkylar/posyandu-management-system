@@ -34,6 +34,9 @@ export default function PenimbanganPage() {
 
   const loadPenimbanganData = async () => {
     try {
+      // Hit server API route (logs appear in terminal)
+      fetch('/api/penimbangan').catch(() => {});
+      
       const { penimbanganApi } = await import('../../../lib/api');
       const response = await penimbanganApi.getAll();
       if (response.success && response.data) {

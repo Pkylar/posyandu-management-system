@@ -37,6 +37,9 @@ export default function IbuMenyusuiPage() {
 
   const loadIbuMenyusuiData = async () => {
     try {
+      // Hit server API route (logs appear in terminal)
+      fetch('/api/ibu-menyusui').catch(() => {});
+      
       const { ibuMenyusuiApi } = await import('../../../lib/api');
       const response = await ibuMenyusuiApi.getAll();
       if (response.success && response.data) {
