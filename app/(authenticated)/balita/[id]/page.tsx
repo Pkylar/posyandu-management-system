@@ -54,7 +54,6 @@ export default function DetailBalitaPage() {
     try {
       const { balitaApi } = await import('../../../../lib/api');
       
-      balitaApi.init();
       const allResponse = await balitaApi.getAll();
       
       if (allResponse.success && allResponse.data && allResponse.data.length > 0) {
@@ -98,32 +97,24 @@ export default function DetailBalitaPage() {
           // Load actual penimbangan data for this balita
           try {
             const { penimbanganApi } = await import('../../../../lib/api');
-            penimbanganApi.init();
-            console.log('Loading penimbangan for balita ID:', foundBalita.id);
             const penimbanganResponse = await penimbanganApi.getByBalitaId(foundBalita.id);
             
-            console.log('Penimbangan API Response:', penimbanganResponse);
-            
             if (penimbanganResponse.success && penimbanganResponse.data) {
-              console.log('Raw penimbangan data:', penimbanganResponse.data);
-              // Transform API data to match component structure
               const transformedData = penimbanganResponse.data.map(p => ({
                 id: p.id,
                 tanggal: p.date,
                 umur_bulan: p.age,
                 berat_badan: p.weight,
                 tinggi_badan: p.height,
-                lingkar_kepala: 48, // Default value since not in API
+                lingkar_kepala: 48,
                 status_gizi: p.nutritionStatus === 'normal' ? 'Gizi Baik' : 
                             p.nutritionStatus === 'kurang' ? 'Gizi Kurang' : 
                             p.nutritionStatus === 'berlebih' ? 'Gizi Berlebih' : 'Obesitas',
                 status_stunting: p.stuntingStatus === 'normal' ? 'Normal' : 
                                 p.stuntingStatus === 'stunting' ? 'Stunting' : 'Severely Stunted',
               }));
-              console.log('Transformed penimbangan data:', transformedData);
               setPenimbanganHistory(transformedData);
             } else {
-              console.log('No penimbangan data found or API failed');
               setPenimbanganHistory([]);
             }
           } catch (error) {
