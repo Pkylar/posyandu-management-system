@@ -23,8 +23,11 @@ const savePenimbanganData = (data: Penimbangan[]): void => {
 
 export const penimbanganApi = {
   init() {
-    // Force reload mock data to ensure latest data is loaded
-    savePenimbanganData(mockPenimbangan);
+    // Only load mock data if storage is empty
+    const existing = getFromStorage<Penimbangan[]>(STORAGE_KEY);
+    if (!existing || existing.length === 0) {
+      savePenimbanganData(mockPenimbangan);
+    }
   },
   async getAll(): Promise<ApiResponse<Penimbangan[]>> {
     console.log('📊 [GET] /api/penimbangan - Fetching all penimbangan data');

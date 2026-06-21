@@ -35,21 +35,9 @@ export default function BalitaPage() {
 
   const loadBalitaData = async () => {
     try {
-      const response = await relationalService.getRecipientOptions('balita');
-      setBalitaList(response.map(item => ({
-        id: item.id,
-        name: item.name,
-        nik: '', // Will be loaded properly
-        gender: 'L' as 'L' | 'P',
-        birthDate: '',
-        parentName: '',
-        address: '',
-        phone: '',
-        createdAt: '',
-        updatedAt: ''
-      })));
+      // Hit server API route (logs appear in terminal)
+      fetch('/api/balita').catch(() => {});
       
-      // Load full data
       const { balitaApi } = await import('../../../lib/api');
       const fullResponse = await balitaApi.getAll();
       if (fullResponse.success && fullResponse.data) {

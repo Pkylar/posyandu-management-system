@@ -16,9 +16,12 @@ const saveVitaminVaksinData = (data: VitaminVaksin[]): void => {
 };
 
 export const vitaminVaksinApi = {
-  // Force reload mock data to ensure latest data is loaded
+  // Only load mock data if storage is empty
   init() {
-    saveVitaminVaksinData(mockVitaminVaksin);
+    const existing = getFromStorage<VitaminVaksin[]>(STORAGE_KEY);
+    if (!existing || existing.length === 0) {
+      saveVitaminVaksinData(mockVitaminVaksin);
+    }
   },
 
   async getAll(): Promise<ApiResponse<VitaminVaksin[]>> {

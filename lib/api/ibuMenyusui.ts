@@ -16,9 +16,12 @@ const saveIbuMenyusuiData = (data: IbuMenyusui[]): void => {
 };
 
 export const ibuMenyusuiApi = {
-  // Force reload mock data to ensure latest data is loaded
+  // Only load mock data if storage is empty
   init() {
-    saveIbuMenyusuiData(mockIbuMenyusui);
+    const existing = getFromStorage<IbuMenyusui[]>(STORAGE_KEY);
+    if (!existing || existing.length === 0) {
+      saveIbuMenyusuiData(mockIbuMenyusui);
+    }
   },
 
   async getAll(): Promise<ApiResponse<IbuMenyusui[]>> {

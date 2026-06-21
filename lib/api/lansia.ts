@@ -16,9 +16,12 @@ const saveLansiaData = (data: Lansia[]): void => {
 };
 
 export const lansiaApi = {
-  // Force reload mock data to ensure latest data is loaded
+  // Only load mock data if storage is empty
   init() {
-    saveLansiaData(mockLansia);
+    const existing = getFromStorage<Lansia[]>(STORAGE_KEY);
+    if (!existing || existing.length === 0) {
+      saveLansiaData(mockLansia);
+    }
   },
 
   async getAll(): Promise<ApiResponse<Lansia[]>> {

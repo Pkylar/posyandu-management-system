@@ -24,9 +24,12 @@ const saveBalitaData = (data: Balita[]): void => {
 };
 
 export const balitaApi = {
-  // Force reload mock data to ensure latest data is loaded
+  // Only load mock data if storage is empty (don't overwrite edited data)
   init() {
-    saveBalitaData(mockBalita);
+    const existing = getFromStorage<Balita[]>(STORAGE_KEY);
+    if (!existing || existing.length === 0) {
+      saveBalitaData(mockBalita);
+    }
   },
 
   async getAll(): Promise<ApiResponse<Balita[]>> {

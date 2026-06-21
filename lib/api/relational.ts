@@ -30,17 +30,25 @@ export const relationalService = {
     
     await delay(100);
     
-    // Direct force load data from mock
+    // Only load mock data if storage is empty
     if (type === 'ibu_menyusui') {
-      const { mockIbuMenyusui } = await import('../data/mockData');
-      saveData(STORAGE_KEYS.ibu_menyusui, mockIbuMenyusui);
-      console.log('Force loaded ibu menyusui mock data:', mockIbuMenyusui);
+      const existing = getData(STORAGE_KEYS.ibu_menyusui);
+      if (!existing || existing.length === 0) {
+        const { mockIbuMenyusui } = await import('../data/mockData');
+        saveData(STORAGE_KEYS.ibu_menyusui, mockIbuMenyusui);
+      }
     } else if (type === 'balita') {
-      const { mockBalita } = await import('../data/mockData');
-      saveData(STORAGE_KEYS.balita, mockBalita);
+      const existing = getData(STORAGE_KEYS.balita);
+      if (!existing || existing.length === 0) {
+        const { mockBalita } = await import('../data/mockData');
+        saveData(STORAGE_KEYS.balita, mockBalita);
+      }
     } else if (type === 'lansia') {
-      const { mockLansia } = await import('../data/mockData');
-      saveData(STORAGE_KEYS.lansia, mockLansia);
+      const existing = getData(STORAGE_KEYS.lansia);
+      if (!existing || existing.length === 0) {
+        const { mockLansia } = await import('../data/mockData');
+        saveData(STORAGE_KEYS.lansia, mockLansia);
+      }
     }
     
     const storageKey = STORAGE_KEYS[type];
