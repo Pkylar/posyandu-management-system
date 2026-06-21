@@ -82,12 +82,15 @@ export default function DetailBalitaPage() {
             jenis_kelamin: foundBalita.gender,
             tempat_lahir: foundBalita.birthPlace || "Jakarta",
             tanggal_lahir: foundBalita.birthDate,
-            nama_ayah: foundBalita.fatherName || "Ayah " + foundBalita.name,
-            nama_ibu: foundBalita.motherName || foundBalita.parentName,
+            nama_ayah: foundBalita.fatherName || foundBalita.parentName || "-",
+            nama_ibu: foundBalita.motherName || foundBalita.parentName || "-",
             golongan_darah: foundBalita.bloodType || "O",
             berat_lahir: foundBalita.birthWeight || 3.2,
             panjang_lahir: foundBalita.birthHeight || 48,
             alamat: foundBalita.address,
+            nama_ortu: foundBalita.parentName || "-",
+            no_hp: foundBalita.phone || "-",
+            nik: foundBalita.nik || "-",
             rt: foundBalita.rt || "02",
             rw: foundBalita.rw || "01",
           };
@@ -264,12 +267,16 @@ export default function DetailBalitaPage() {
           
           <div style={{ display: "grid", gap: 16 }}>
             <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", alignItems: "center" }}>
-              <span style={{ fontSize: 14, color: "#64748b" }}>Nama Ayah</span>
-              <span style={{ fontSize: 14, fontWeight: 500, color: "#0f172a" }}>{balitaData.nama_ayah}</span>
+              <span style={{ fontSize: 14, color: "#64748b" }}>Nama Orang Tua</span>
+              <span style={{ fontSize: 14, fontWeight: 500, color: "#0f172a" }}>{balitaData.nama_ortu}</span>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", alignItems: "center" }}>
-              <span style={{ fontSize: 14, color: "#64748b" }}>Nama Ibu</span>
-              <span style={{ fontSize: 14, fontWeight: 500, color: "#0f172a" }}>{balitaData.nama_ibu}</span>
+              <span style={{ fontSize: 14, color: "#64748b" }}>NIK</span>
+              <span style={{ fontSize: 14, fontWeight: 500, color: "#0f172a" }}>{balitaData.nik}</span>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", alignItems: "center" }}>
+              <span style={{ fontSize: 14, color: "#64748b" }}>No. HP</span>
+              <span style={{ fontSize: 14, fontWeight: 500, color: "#0f172a" }}>{balitaData.no_hp}</span>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", alignItems: "start" }}>
               <span style={{ fontSize: 14, color: "#64748b" }}>Alamat</span>
