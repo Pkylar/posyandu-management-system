@@ -38,13 +38,34 @@ export default function ProfilPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setProfileData(formData);
-      setEditMode(false);
+    try {
+      console.log('📝 [PUT] /api/profil - Updating user profile');
+      const { authApi } = await import('../../../lib/api');
+      const response = await authApi.updateProfile(formData);
+      
+      if (response.success) {
+        console.log('✅ [PUT] /api/profil - Success: Profile updated');
+        setProfileData(formData);
+        
+        // Update user data in localStorage
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        user.name = formData.nama;
+        user.email = formData.email;
+        user.role = formData.jabatan;
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        setEditMode(false);
+        alert("Profil berhasil diperbarui!");
+      } else {
+        console.log('❌ [PUT] /api/profil - Failed:', response.error);
+        alert(response.error || "Gagal memperbarui profil");
+      }
+    } catch (error) {
+      console.error('❌ [PUT] /api/profil - Error:', error);
+      alert("Terjadi kesalahan");
+    } finally {
       setLoading(false);
-      alert("Profil berhasil diperbarui!");
-    }, 1000);
+    }
   };
 
   const handleCancel = () => {

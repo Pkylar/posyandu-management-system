@@ -94,13 +94,28 @@ export default function UbahPasswordPage() {
 
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      // Simulate successful password change
-      alert("Password berhasil diubah! Silakan login kembali.");
-      localStorage.clear();
-      router.push("/login");
-    }, 1500);
+    try {
+      console.log('🔐 [PUT] /api/auth/change-password - Changing password');
+      const { authApi } = await import('../../../lib/api');
+      const response = await authApi.changePassword(formData.passwordLama, formData.passwordBaru);
+      
+      if (response.success) {
+        console.log('✅ [PUT] /api/auth/change-password - Success: Password changed');
+        alert("Password berhasil diubah! Silakan login kembali.");
+        localStorage.removeItem('is_logged_in');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        router.push("/login");
+      } else {
+        console.log('❌ [PUT] /api/auth/change-password - Failed:', response.error);
+        setErrors({ ...errors, passwordBaru: response.error || "Gagal mengubah password" });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('❌ [PUT] /api/auth/change-password - Error:', error);
+      setErrors({ ...errors, passwordBaru: "Terjadi kesalahan" });
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {

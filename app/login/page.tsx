@@ -30,6 +30,8 @@ export default function LoginPage() {
     // Mock authentication - Accept any login
     setTimeout(() => {
       if (username.trim() && password.trim()) {
+        console.log('🔐 [POST] /api/auth/login - Login attempt for username:', username);
+        
         // Check registered users first
         const registeredUsers = JSON.parse(localStorage.getItem("registered_users") || "[]");
         const foundUser = registeredUsers.find((user: any) => 
@@ -63,9 +65,12 @@ export default function LoginPage() {
         localStorage.setItem("user", JSON.stringify(mockUser));
         localStorage.setItem("is_logged_in", "true");
 
+        console.log(`✅ [POST] /api/auth/login - Success: ${mockUser.name} logged in`);
+
         // Redirect to dashboard
         router.push("/dashboard");
       } else {
+        console.log('❌ [POST] /api/auth/login - Failed: Empty credentials');
         setError("Username dan password harus diisi");
       }
       setLoading(false);
