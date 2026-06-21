@@ -35,9 +35,6 @@ export const balitaApi = {
   async getAll(): Promise<ApiResponse<Balita[]>> {
     console.log('🔍 [GET] /api/balita - Fetching all balita data');
     
-    // Ensure data is initialized
-    this.init();
-    
     await randomDelay();
     
     if (shouldSimulateError()) {
@@ -61,9 +58,6 @@ export const balitaApi = {
 
   async getById(id: string): Promise<ApiResponse<Balita>> {
     console.log(`🔍 [GET] /api/balita/${id} - Fetching balita detail`);
-    
-    // Ensure data is initialized
-    this.init();
     
     await delay(300);
     
